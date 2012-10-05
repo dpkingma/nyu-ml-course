@@ -2,7 +2,7 @@
 Spambase dataset implementation
 By Xiang Zhang (xiang.zhang [at] nyu.edu) and Durk Kingma
 (dpkingma [at] gmail.com) @ New York University
-Version 0.1, 09/24/2012
+Version 0.2, 10/04/2012
 
 This file is implemented for the assigments of CSCI-GA.2565-001 Machine
 Learning at New York University, taught by professor Yann LeCun
@@ -113,7 +113,9 @@ function spambase:normalize(train, test)
       var = var*(i-1)/i + torch.pow(train[i][1] - mean,2)/i
    end
    -- Get the standard deviation
-   std = torch.sqrt(var)
+   local std = torch.sqrt(var)
+   -- If any std is 0, make it 1
+   std:apply(function (x) if x == 0 then return 1 end end)
    -- Normalize the training dataset
    for i = 1,train:size() do
       train[i][1] = torch.cdiv(train[i][1]-mean, std)

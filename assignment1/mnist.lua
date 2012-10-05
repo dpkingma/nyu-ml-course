@@ -2,7 +2,7 @@
 MNIST dataset implementation
 By Xiang Zhang (xiang.zhang [at] nyu.edu) and Durk Kingma
 (dpkingma [at] gmail.com) @ New York University
-Version 0.1, 09/24/2012
+Version 0.2, 10/04/2012
 
 This file is implemented for the assigments of CSCI-GA.2565-001 Machine
 Learning at New York University, taught by professor Yann LeCun
@@ -98,7 +98,9 @@ function mnist:normalize(train, test)
       var = var*(i-1)/i + torch.sum(torch.pow(train[i][1] - mean,2))/train:features()/i
    end
    -- Get the standard deviation
-   std = math.sqrt(var)
+   local std = math.sqrt(var)
+   -- If any std is 0, make it 1
+   if std == 0 then std = 1 end
    -- Normalize the training dataset
    for i = 1,train:size() do
       train[i][1] = (train[i][1]-mean)/std
